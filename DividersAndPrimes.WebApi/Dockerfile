@@ -11,7 +11,6 @@ WORKDIR /src
 COPY ["DividersAndPrimes.WebApi/DividersAndPrimes.WebApi.csproj", "DividersAndPrimes.WebApi/"]
 COPY ["DividersAndPrimes.Application/DividersAndPrimes.Application.csproj", "DividersAndPrimes.Application/"]
 COPY ["DividersAndPrimes.Domain/DividersAndPrimes.Domain.csproj", "DividersAndPrimes.Domain/"]
-COPY ["nuget.config", "./"]
 RUN dotnet restore --configfile nuget.config "DividersAndPrimes.WebApi/DividersAndPrimes.WebApi.csproj"
 COPY . .
 WORKDIR "/src/DividersAndPrimes.WebApi"
