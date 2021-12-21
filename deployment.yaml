@@ -1,0 +1,59 @@
+﻿---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: math-server
+  #namespace: go
+  labels:
+    app: mathapi
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: mathapi
+  template:
+    metadata:
+      labels:
+        app: mathapi
+    spec:
+      imagePullSecrets:
+      - name: pipeline-docker-registry
+      containers:
+      - name: mathapi
+        image: ${CICD_IMAGE}:${CICD_EXECUTION_SEQUENCE}
+        ports:
+        - containerPort: 80
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: math-service
+  #namespace: go
+spec:
+  selector:
+    app: mathapi
+  type: ClusterIP
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+
+
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  #namespace: go
+  name: math-ingress
+  annotations:
+    allow.http: "false"
+spec:
+  rules:
+  - host: math.rancher.lualsiv.dev.br
+    http:
+      paths:
+        - path: /
+          backend:
+            serviceName: math-service
+            servicePort: 80

@@ -1,0 +1,12 @@
+﻿stages:
+- name: Publish & Build image
+  steps:
+  - publishImageConfig:
+      dockerfilePath: ./DividersAndPrimes.WebApi/Dockerfile
+      buildContext: .
+      tag: math-server:${CICD_EXECUTION_SEQUENCE}
+      pushRemote: true
+- name: Deploy
+  steps:
+  - applyYamlConfig:
+      path: ./deployment.yaml
